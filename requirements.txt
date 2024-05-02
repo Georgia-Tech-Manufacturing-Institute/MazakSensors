@@ -9,9 +9,11 @@ Adafruit-PureIO==1.1.11
 adafruit-python-shell==1.8.1
 args==0.1.0
 clint==0.5.1
+daqhats==1.4.1.0
 numpy==2.0.0rc1
 pyftdi==0.55.4
 pyserial==3.5
 pyusb==1.2.1
 raspberrypi==0.1.9
+setuptools==69.5.1
 typing_extensions==4.11.0
