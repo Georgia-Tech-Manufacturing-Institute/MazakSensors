@@ -18,48 +18,51 @@ def monitoring(sample_rate=0.1, timeout=10, channel_ranges=[(0,7)]):
     :return:
     '''
     def convert_temp(pin): # Conversion from voltage to
-        voltage = (pin.value * 3.3) / 65536
+        voltage = (pin * 3.3) / 65536
         return (voltage - 1.25) / 0.005
 
     # Initialization
     start_time = time.time()
+    print(start_time)
     hat_list = daqhats.hat_list()
-
-    if len(hat_list) > 1:
+    measurements = 0
+    print(hat_list)
+    if len(hat_list) > 0:
         print('Identified Boards: ', len(hat_list))
-
         devices = []
         for i, hat in enumerate(hat_list): # Allows for multiple boards
             address = hat.address # int
             try:
-                print(channel_ranges[i])
+                lc, hc = channel_ranges[i]
             except IndexError:
                 lc, hc = 0, 7
-            devices.append(mcc118(address=address))
-            print('Blinking HAT: ', address)
-            devices[-1].blink_led(count=10) # Blink to show that you exist !
+            measurements += hc - lc + 1
+            devices.append((mcc118(address=address), lc, hc))
+            devices[-1][0].blink_led(count=10) # Blink to show that you exist !
     else:
         print('No Boards found')
         return None
 
     options = OptionFlags.DEFAULT
     condition = True
-    data_array = np.zeros(len())
+    data_array = np.zeros((int(timeout//sample_rate), measurements))
+    i = 0
     while condition:
-        temp_array = convert_temp(np.array(tca)) # should do it to the whole array but we'll see
-
-        for hat in devices:
-            for chan in range(low_chan, high_chan + 1):
-                value = hat.a_in_read(chan, options)
-
-        if timeout == False:
+        row = np.zeros(measurements)
+        j = 0
+        for hat, lc, hc in devices: # Board 
+            for chan in range(lc, hc + 1): # Channel
+                row[j] = hat.a_in_read(chan, options)
+                j += 1
+        data_array[i, :] = convert_temp(row)
+        print(row)
+        if timeout == False: # Keep going until manual stop
             condition = True
         else: # Check if timeout exceeded
-            condition = (time.time() - start_time) > timeout
-
+            condition = (time.time() - start_time) < timeout
+        j+=1
         time.sleep(sample_rate)
-
-    return temp_array
+    return None#temp_array
 
 if __name__ == '__main__':
-    monitoring(1)
+    monitoring(timeout=1, channel_ranges=[(1,1)])
