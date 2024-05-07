@@ -4,12 +4,9 @@ import time
 import daqhats
 from daqhats import mcc118, OptionFlags
 import os
-import csv
-
 
 # pip install -r requirements.txt
 # https://github.com/adafruit/circup/issues/143 - Resolve with pip install setuptools
-#
 
 def init_csv(name='record', header=[]):
     init_date = dt.now().strftime('%Y-%m-%d')
@@ -29,7 +26,7 @@ def init_csv(name='record', header=[]):
 def monitoring(sample_rate=0.1, timeout=10, channel_ranges=[]):
     '''
 
-    :param sample_rate:
+    :param sample_rate: time spacing between observations.
     :param timeout: Length of time to wait. Defaults to 10 seconds. Set as -1 to read indefinitely.
     :param channels: list of tuples; for each hat, specify the range of channels to read
     :return:
@@ -78,7 +75,7 @@ def monitoring(sample_rate=0.1, timeout=10, channel_ranges=[]):
         with open(filename, 'a', newline='') as csv:
             csv.writer(csv).writerow(row)
 
-        if timeout == False:
+        if timeout == -1: # Do not terminate until forced.
             condition = True
         else: # Check if timeout exceeded
             condition = (time.time() - start_time) > timeout
