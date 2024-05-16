@@ -20,8 +20,7 @@ from __future__ import print_function
 from time import sleep
 from sys import stdout
 from daqhats import mcc118, OptionFlags, HatIDs, HatError
-from daqhats_utils import select_hat_device, enum_mask_to_string, \
-chan_list_to_mask
+
 import csv
 import os
 from datetime import datetime as dt
@@ -38,7 +37,10 @@ def main():
     # Store the channels in a list and convert the list to a channel mask that
     # can be passed as a parameter to the MCC 118 functions.
     channels = [0, 1, 2, 3]
-    channel_mask = chan_list_to_mask(channels)
+
+    for chan in channels:
+        channel_mask |= 0x01 << chan
+
     num_channels = len(channels)
 
     samples_per_channel = 10000
@@ -47,7 +49,7 @@ def main():
 
     try:
         # Select an MCC 118 HAT device to use.
-        address = select_hat_device(HatIDs.MCC_118)
+        address = daqhats.hat_list()[0]
         hat = mcc118(address)
 
         print('\nSelected MCC 118 HAT device at address', address)
@@ -63,7 +65,6 @@ def main():
         print('    Requested scan rate: ', scan_rate)
         print('    Actual scan rate: ', actual_scan_rate)
         print('    Samples per channel', samples_per_channel)
-        print('    Options: ', enum_mask_to_string(OptionFlags, options))
 
 
         # Configure and start the scan.
