@@ -1,0 +1,48 @@
+Metadata-Version: 2.1
+Name: raspberrypi
+Version: 0.1.9
+Summary: A Raspberry Pi Toolkit.
+Home-page: https://leesoar.com
+Author: leesoar
+Author-email: secure@tom.com
+License: MIT
+Keywords: raspberrypi,raspberry
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.3.0
+Description-Content-Type: text/markdown
+
+
+## raspberrypi
+
+A Raspberry Pi Toolkit.
+
+Other features will be developed in the future.
+
+Thanks for raspberrypi.org!
+
+
+### Release Note
+* 0.1.9: Fixed eth's bug.
+* 0.1.5: Add notice.
+* 0.1.3: Fixed windows bug.
+* 0.1.2: Sniffing online devices.
+
+
+### How to use
+* Scan Raspberry Pi Devices
+```shell
+$ raspberrypi device
+=> Device 1:
+{
+    "ip": "10.xxx.xx.xxx",
+    "mac": "dc:a6:xx:xx:xx:xx",
+    "net": "en0"
+}
+```
+

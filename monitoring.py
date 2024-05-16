@@ -71,22 +71,22 @@ def main():
                             options)
 
         print('Starting scan ... Press Ctrl-C to stop\n')
-        
-	header = ['timestamp'] + channels
-	file = init_csv(name='temperature', header= header)
-
-        try:
-            read_and_display_data(hat, samples_per_channel, num_channels, record_to=file)
-
-        except KeyboardInterrupt:
-            # Clear the '^C' from the display.
-            print(CURSOR_BACK_2, ERASE_TO_END_OF_LINE, '\n')
-            hat.a_in_scan_stop()
-
-        hat.a_in_scan_cleanup()
-
     except (HatError, ValueError) as err:
         print('\n', err)
+    header = ['timestamp'] + channels
+    ff = init_csv(name='temperature', header= header)
+
+    try:
+        read_and_display_data(hat, samples_per_channel, num_channels, record_to=ff)
+
+    except KeyboardInterrupt:
+        # Clear the '^C' from the display.
+        print(CURSOR_BACK_2, ERASE_TO_END_OF_LINE, '\n')
+        hat.a_in_scan_stop()
+
+    hat.a_in_scan_cleanup()
+
+
 
 def init_csv(name='record', header=[]):
     init_date = dt.now().strftime('%Y-%m-%d')

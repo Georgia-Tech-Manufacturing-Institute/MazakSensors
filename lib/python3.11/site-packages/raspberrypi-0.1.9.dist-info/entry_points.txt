@@ -1,0 +1,3 @@
+[console_scripts]
+raspberrypi = raspberrypi.main:run
+
