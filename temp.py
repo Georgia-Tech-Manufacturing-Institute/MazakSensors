@@ -2,8 +2,10 @@ import numpy as np
 from datetime import datetime as dt
 import time
 import daqhats
+
 import os
 import csv
+
 
 # pip install -r requirements.txt
 # https://github.com/adafruit/circup/issues/143 - Resolve with pip install setuptools
@@ -16,8 +18,10 @@ def init_csv(name='record', header=[]):
     if not os.path.exists(directory):
         os.makedirs(directory)
     filename = os.path.join(directory, f'{name}_{init_time}.csv')
+
     with open(filename, 'a', newline='') as f:
         csv_writer = csv.writer(f)
+
         if len(header)>0:
             csv_writer.writerow(header)
     return filename
@@ -48,7 +52,9 @@ def monitoring(sample_rate=0.1, timeout=10, channel_ranges=[]):
             except IndexError: # Default to read all addresses
                 lc, hc = 0, 7
             header += [f'{address}_{i}' for i in range(lc, hc)]
+
             devices.append(daqhats.mcc118(address=address))
+
             print('Blinking HAT: ', address)
             devices[-1].blink_led(count=3) # Blink to show that you exist !
     else:
